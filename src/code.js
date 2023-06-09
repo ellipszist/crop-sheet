@@ -6,7 +6,7 @@
  */
 
 // ESLint config.
-/* exported onOpen, onInstall, cropToSelection, cropToData */
+/* exported onOpen, cropToSelection, cropToData */
 
 /**
  * Adds a menu when the spreadsheet is opened.
@@ -16,13 +16,6 @@ function onOpen() {
     .addItem('Crop to data', 'cropToData')
     .addItem('Crop to selection', 'cropToSelection')
     .addToUi();
-}
-
-/**
- * Adds a menu after the add-on is installed.
- */
-function onInstall() {
-  onOpen();
 }
 
 /**
@@ -47,13 +40,14 @@ function cropToData() {
  */
 function cropSheetToRange(range) {
   var sheet = range.getSheet();
-  var spreadsheet = sheet.getParent();
+  var maxRows = sheet.getMaxRows();
+  var maxColumns = sheet.getMaxColumns();
+
+  // Define the new range dimensions
   var firstRow = range.getRow();
   var lastRow = firstRow + range.getNumRows() - 1;
   var firstColumn = range.getColumn();
   var lastColumn = firstColumn + range.getNumColumns() - 1;
-  var maxRows = sheet.getMaxRows();
-  var maxColumns = sheet.getMaxColumns();
 
   // Delete excess rows below the range
   if (lastRow < maxRows) {
@@ -76,5 +70,5 @@ function cropSheetToRange(range) {
   }
 
   // Activate the cropped range
-  sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns()).activate();
+  sheet.getDataRange().activate();
 }
