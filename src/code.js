@@ -13,9 +13,9 @@
  */
 function onOpen() {
   SpreadsheetApp.getUi().createAddonMenu()
-      .addItem('Crop to data', 'cropToData')
-      .addItem('Crop to selection', 'cropToSelection')
-      .addToUi();
+    .addItem('Crop to data', 'cropToData')
+    .addItem('Crop to selection', 'cropToSelection')
+    .addToUi();
 }
 
 /**
@@ -29,25 +29,23 @@ function onInstall() {
  * Crops the current sheet to the user's selection.
  */
 function cropToSelection() {
-  console.log('Cropping to selection');
   var range = SpreadsheetApp.getActiveSheet().getActiveRange();
-  cropToRange(range);
+  cropSheetToRange(range);
 }
 
 /**
  * Crops the current sheet to the data.
  */
 function cropToData() {
-  console.log('Cropping to data');
   var range = SpreadsheetApp.getActiveSheet().getDataRange();
-  cropToRange(range);
+  cropSheetToRange(range);
 }
 
 /**
  * Crops the sheet such that it only contains the given range.
  * @param {SpreadsheetApp.Range} range The range to crop to.
  */
-function cropToRange(range) {
+function cropSheetToRange(range) {
   var sheet = range.getSheet();
   var spreadsheet = sheet.getParent();
   var firstRow = range.getRow();
@@ -57,17 +55,26 @@ function cropToRange(range) {
   var maxRows = sheet.getMaxRows();
   var maxColumns = sheet.getMaxColumns();
 
+  // Delete excess rows below the range
   if (lastRow < maxRows) {
     sheet.deleteRows(lastRow + 1, maxRows - lastRow);
   }
+
+  // Delete excess rows above the range
   if (firstRow > 1) {
     sheet.deleteRows(1, firstRow - 1);
   }
+
+  // Delete excess columns to the right of the range
   if (lastColumn < maxColumns) {
     sheet.deleteColumns(lastColumn + 1, maxColumns - lastColumn);
   }
+
+  // Delete excess columns to the left of the range
   if (firstColumn > 1) {
     sheet.deleteColumns(1, firstColumn - 1);
   }
+
+  // Activate the cropped range
   sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns()).activate();
 }
