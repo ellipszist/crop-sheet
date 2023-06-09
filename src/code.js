@@ -9,33 +9,33 @@
 /* exported onOpen, cropToSelection, cropToData */
 
 /**
- * Adds a menu when the spreadsheet is opened.
+ * Adds a custom menu when the spreadsheet is opened.
  */
 function onOpen() {
   SpreadsheetApp.getUi().createAddonMenu()
-    .addItem('Crop to data', 'cropToData')
-    .addItem('Crop to selection', 'cropToSelection')
+    .addItem('Crop to Data', 'cropToData')
+    .addItem('Crop to Selection', 'cropToSelection')
     .addToUi();
 }
 
 /**
- * Crops the current sheet to the user's selection.
+ * Crops the current sheet to the user's selected range.
  */
 function cropToSelection() {
-  var range = SpreadsheetApp.getActiveSheet().getActiveRange();
-  cropSheetToRange(range);
+  var selectedRange = SpreadsheetApp.getActiveSheet().getActiveRange();
+  cropSheetToRange(selectedRange);
 }
 
 /**
- * Crops the current sheet to the data.
+ * Crops the current sheet to the data range.
  */
 function cropToData() {
-  var range = SpreadsheetApp.getActiveSheet().getDataRange();
-  cropSheetToRange(range);
+  var dataRange = SpreadsheetApp.getActiveSheet().getDataRange();
+  cropSheetToRange(dataRange);
 }
 
 /**
- * Crops the sheet such that it only contains the given range.
+ * Crops the sheet to the specified range.
  * @param {SpreadsheetApp.Range} range The range to crop to.
  */
 function cropSheetToRange(range) {
@@ -43,7 +43,7 @@ function cropSheetToRange(range) {
   var maxRows = sheet.getMaxRows();
   var maxColumns = sheet.getMaxColumns();
 
-  // Define the new range dimensions
+  // Define the new range boundaries
   var firstRow = range.getRow();
   var lastRow = firstRow + range.getNumRows() - 1;
   var firstColumn = range.getColumn();
