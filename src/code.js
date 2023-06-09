@@ -70,5 +70,5 @@ function cropSheetToRange(range) {
   }
 
   // Activate the cropped range
-  sheet.getDataRange().activate();
+  sheet.setActiveRange(range);
 }
